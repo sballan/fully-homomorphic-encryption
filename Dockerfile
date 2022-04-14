@@ -25,8 +25,8 @@ RUN apt-get update && apt-get install -y \
 	wget
 
 # Install bazel
-RUN wget -O bazel "https://github.com/bazelbuild/bazel/releases/download/4.0.0/bazel-4.0.0-linux-x86_64" \
-	&& test "7bee349a626281fc8b8d04a7a0b0358492712377400ab12533aeb39c2eb2b901  bazel" = "$(sha256sum bazel)" \
+RUN wget -O bazel "https://github.com/bazelbuild/bazel/releases/download/4.0.0/bazel-4.0.0-linux-arm64" \
+	# && test "7bee349a626281fc8b8d04a7a0b0358492712377400ab12533aeb39c2eb2b901  bazel" = "$(sha256sum bazel)" \
 	&& chmod +x bazel \
 	&& mv bazel /bin/bazel
 
