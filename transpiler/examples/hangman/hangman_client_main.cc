@@ -80,6 +80,33 @@ int main() {
     // Make a move.
     TfheInt cipher_result(params);
 
+
+    // client.cc
+
+    plaintext = "djksjdfk"
+    encrypted = encrypt(plaintext, key)
+    write("/usr/src/somehow.txt", encrypted)
+
+    ----------------
+  // server.cc
+    encrypted_data = open("/usr/src/somehow.txt")
+
+    new_encrypted_entry = "somehow"
+
+    XLS_CHECK_OK(update(cipher_result, encrypted_data, new_encrypted_entry, key.cloud()));
+
+    write("/usr/src/somehow.txt", cipher_result)
+
+    encrypted_data = cipher_result
+
+    encrypted_query_for_reading
+
+    XLS_CHECK_OK(read(cipher_result, encrypted_data, encrypted_query_for_reading, key.cloud()));
+
+    send_to_client(cipher_result)
+
+
+
     XLS_CHECK_OK(hangmanMakeMove(cipher_result, ciphertext, key.cloud()));
 
     int move_result = cipher_result.Decrypt(key);
