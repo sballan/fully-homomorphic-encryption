@@ -15,32 +15,11 @@
 #include "hangman_api.h"
 
 #pragma hls_top
-int hangmanMakeMove(char letter) {
-  // "hangman" is the secret word that needs to be guessed by the player
-
-  // TODO: Implement a less hacky iterative solution with arrays
-  // TODO: Implement support for multiple words
-
-  if (letter == 'h') {
-    return 64;  // 100000, Hangman
+void hangmanMakeMove(char database[4], char query[1], char result[1]) {
+#pragma hls_unroll yes
+  for (int i = 0; i < 4; i+=2) {
+    if(query[0] == database[i]) {
+      result[0] = database[i+1];
+    }
   }
-
-  if (letter == 'a') {
-    return 34;  // 0100010, hAngmAn
-  }
-
-  if (letter == 'n') {
-    return 17;  // 0010001, haNgmaN
-  }
-
-  if (letter == 'g') {
-    return 8;  // 0001000, hanGman
-  }
-
-  if (letter == 'm') {
-    return 4;  // 0000100, hangMan
-  }
-
-  // No matching letters
-  return 0;
 }
