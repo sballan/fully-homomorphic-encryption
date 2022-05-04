@@ -45,8 +45,8 @@ int main() {
 
   std::cout << "Welcome to Discreet Logs" << std::endl;
 
-  auto database = TfheString::Encrypt("a", key);
-  auto db_idx = TfheArray<int32_t>::Encrypt({1}, key);
+  auto database = TfheString::Encrypt("ab", key);
+  auto db_idx = TfheArray<int32_t>::Encrypt({1,2}, key);
   // auto query = TfheString::Encrypt("b", key);
   auto query_type = TfheInt::Encrypt(1, key);
   auto query_length = TfheInt::Encrypt(1, key);
@@ -54,9 +54,14 @@ int main() {
   std::string input;
   getline(std::cin, input);
 
-  auto query = TfheString::Encrypt(input, key);
+  char input_chars[2];
+  for(int i=0; i<2 && i<input.size(); i++) {
+    input_chars[i] = input[i];
+  }
 
-  TfheString cipher_result = {1, params};
+  auto query = TfheString::Encrypt(input_chars, key);
+
+  TfheString cipher_result = {2, params};
 
   XLS_CHECK_OK(
     hangmanMakeMove(
