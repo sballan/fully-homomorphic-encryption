@@ -15,11 +15,19 @@
 #include "hangman_api.h"
 
 #pragma hls_top
-void hangmanMakeMove(char database[4], char query[1], char result[1]) {
+void hangmanMakeMove(
+  char db[MAX_ARRAY_SIZE], 
+  int db_idx[MAX_ARRAY_SIZE], 
+  int query_type, 
+  char query[MAX_ARRAY_SIZE], 
+  int query_size, 
+  char result[MAX_ARRAY_SIZE]
+) {
 #pragma hls_unroll yes
-  for (int i = 0; i < 4; i+=2) {
-    if(query[0] == database[i]) {
-      result[0] = database[i+1];
-    }
-  }
+  db[0] = 'a';
+  db_idx[0] = 0;
+  query_type = 0;
+  query[0] = 'a';
+  query_size = 0;
+  result[0] = 'k';
 }

@@ -25,6 +25,15 @@
 #ifndef FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_HANGMAN_HANGMAN_API_H
 #define FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_HANGMAN_HANGMAN_API_H
 
-void hangmanMakeMove(char database[4], char query[1], char result[1]);
+const int MAX_ARRAY_SIZE = 2;
+
+void hangmanMakeMove(
+  char db[MAX_ARRAY_SIZE], 
+  int db_idx[MAX_ARRAY_SIZE], 
+  int query_type, 
+  char query[MAX_ARRAY_SIZE], 
+  int query_size, 
+  char result[MAX_ARRAY_SIZE]
+);
 
 #endif  // FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_HANGMAN_HANGMAN_API_H
