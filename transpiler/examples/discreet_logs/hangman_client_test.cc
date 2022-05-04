@@ -17,7 +17,7 @@
 #include <string>
 
 #include "gtest/gtest.h"
-#include "transpiler/examples/hangman/hangman_client.h"
+#include "transpiler/examples/discreet_logs/hangman_client.h"
 
 TEST(UpdatesCurrentWordWithLetterTest, Equality) {
   std::string result = update_current_word('h', 64, "_ _ _ _ _ _ _ ");
