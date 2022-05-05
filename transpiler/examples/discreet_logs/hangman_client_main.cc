@@ -57,36 +57,45 @@ int main() {
     raw_query_params[i] = -1;
   }
 
+  char raw_result[MAX_ARRAY_SIZE];
+  for(int i=0; i<MAX_ARRAY_SIZE; i++) {
+    raw_result[i] = 0;
+  }
+
   auto db = TfheString::Encrypt(raw_db, key);
   auto db_idx = TfheArray<int32_t>::Encrypt(raw_db_idx, key);
   auto query_params = TfheArray<int32_t>::Encrypt(raw_query_params, key);
+  auto result = TfheString::Encrypt(raw_result, key);
 
-  std::string input;
-  getline(std::cin, input);
+  for(int i=0; i<3; i++){
+    std::string input;
+    getline(std::cin, input);
 
-  char input_chars[MAX_ARRAY_SIZE];
-  for(int i=0; i<MAX_ARRAY_SIZE && i<input.size(); i++) {
-    input_chars[i] = input[i];
+    char input_chars[MAX_ARRAY_SIZE];
+    for(int i=0; i<MAX_ARRAY_SIZE && i<input.size(); i++) {
+      input_chars[i] = input[i];
+    }
+
+    auto query = TfheString::Encrypt(input_chars, key);
+
+    // TfheString result = {MAX_ARRAY_SIZE, params};
+
+    XLS_CHECK_OK(
+      hangmanMakeMove(
+        db, 
+        db_idx, 
+        query, 
+        query_params,
+        result, 
+        key.cloud())
+        );
+  
+    auto output = result.Decrypt(key);
+
+    std::cout << output << "\n";
+    std::cout << "\n";
   }
 
-  auto query = TfheString::Encrypt(input_chars, key);
-
-  TfheString result = {MAX_ARRAY_SIZE, params};
-
-  XLS_CHECK_OK(
-    hangmanMakeMove(
-      db, 
-      db_idx, 
-      query, 
-      query_params,
-      result, 
-      key.cloud())
-      );
- 
-  auto output = result.Decrypt(key);
-
-  std::cout << output << "\n";
-  std::cout << "\n";
 
   return 0;
 }
