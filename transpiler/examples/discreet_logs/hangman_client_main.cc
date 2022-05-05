@@ -27,9 +27,6 @@
 #include "transpiler/examples/discreet_logs/hangman_client.h"
 #include "xls/common/logging/logging.h"
 
-const int MAX_INCORRECT_ATTEMPTS = 6;
-const int MAX_WORD_LENGTH = 7;
-const int CORRECT_RESULT = 127;
 
 constexpr int kMainMinimumLambda = 120;
 
@@ -45,27 +42,36 @@ int main() {
 
   std::cout << "Welcome to Discreet Logs" << std::endl;
 
-  auto database = TfheString::Encrypt("ab", key);
-  auto db_idx = TfheArray<int32_t>::Encrypt({1,2}, key);
-  // auto query = TfheString::Encrypt("b", key);
+  char raw_db[MAX_ARRAY_SIZE];
+  for(int i=0; i<MAX_ARRAY_SIZE; i++) {
+    raw_db[i] = 0;
+  }
+
+  int raw_db_idx[MAX_ARRAY_SIZE];
+  for(int i=0; i<MAX_ARRAY_SIZE; i++) {
+    raw_db_idx[i] = -1;
+  }
+
+  auto db = TfheString::Encrypt(raw_db, key);
+  auto db_idx = TfheArray<int32_t>::Encrypt(raw_db_idx, key);
   auto query_type = TfheInt::Encrypt(1, key);
   auto query_length = TfheInt::Encrypt(1, key);
 
   std::string input;
   getline(std::cin, input);
 
-  char input_chars[2];
-  for(int i=0; i<2 && i<input.size(); i++) {
+  char input_chars[MAX_ARRAY_SIZE];
+  for(int i=0; i<MAX_ARRAY_SIZE && i<input.size(); i++) {
     input_chars[i] = input[i];
   }
 
   auto query = TfheString::Encrypt(input_chars, key);
 
-  TfheString cipher_result = {2, params};
+  TfheString cipher_result = {MAX_ARRAY_SIZE, params};
 
   XLS_CHECK_OK(
     hangmanMakeMove(
-      database, 
+      db, 
       db_idx, 
       query_type,
       query, 
