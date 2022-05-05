@@ -52,10 +52,14 @@ int main() {
     raw_db_idx[i] = -1;
   }
 
+  int raw_query_params[3];
+  for(int i=0; i<3; i++) {
+    raw_query_params[i] = -1;
+  }
+
   auto db = TfheString::Encrypt(raw_db, key);
   auto db_idx = TfheArray<int32_t>::Encrypt(raw_db_idx, key);
-  auto query_type = TfheInt::Encrypt(1, key);
-  auto query_length = TfheInt::Encrypt(1, key);
+  auto query_params = TfheArray<int32_t>::Encrypt(raw_query_params, key);
 
   std::string input;
   getline(std::cin, input);
@@ -67,22 +71,21 @@ int main() {
 
   auto query = TfheString::Encrypt(input_chars, key);
 
-  TfheString cipher_result = {MAX_ARRAY_SIZE, params};
+  TfheString result = {MAX_ARRAY_SIZE, params};
 
   XLS_CHECK_OK(
     hangmanMakeMove(
       db, 
       db_idx, 
-      query_type,
       query, 
-      query_length,
-      cipher_result, 
+      query_params,
+      result, 
       key.cloud())
       );
  
-  auto result = cipher_result.Decrypt(key);
+  auto output = result.Decrypt(key);
 
-  std::cout << result << "\n";
+  std::cout << output << "\n";
   std::cout << "\n";
 
   return 0;

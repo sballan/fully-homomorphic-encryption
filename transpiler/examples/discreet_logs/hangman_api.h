@@ -30,9 +30,8 @@ const int MAX_ARRAY_SIZE = 255;
 void hangmanMakeMove(
   char db[MAX_ARRAY_SIZE], 
   int db_idx[MAX_ARRAY_SIZE], 
-  int query_type, 
   char query[MAX_ARRAY_SIZE], 
-  int query_size, 
+  int query_params[3], 
   char result[MAX_ARRAY_SIZE]
 );
 

@@ -18,16 +18,12 @@
 void hangmanMakeMove(
   char db[MAX_ARRAY_SIZE], 
   int db_idx[MAX_ARRAY_SIZE], 
-  int query_type, 
   char query[MAX_ARRAY_SIZE], 
-  int query_size, 
+  int query_params[3], 
   char result[MAX_ARRAY_SIZE]
 ) {
-#pragma hls_unroll yes
   db[0] = 'a';
   db_idx[0] = 0;
-  query_type = 0;
   query[0] = 'a';
-  query_size = 0;
   result[0] = 'k';
 }
