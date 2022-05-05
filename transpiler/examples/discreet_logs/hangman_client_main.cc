@@ -42,40 +42,62 @@ int main() {
 
   std::cout << "Welcome to Discreet Logs" << std::endl;
 
-  char raw_db[MAX_ARRAY_SIZE];
-  for(int i=0; i<MAX_ARRAY_SIZE; i++) {
+  char raw_db[MAX_ARRAY_SIZE] = {"KeyValue"};
+  for(int i=8; i<MAX_ARRAY_SIZE; i++) {
     raw_db[i] = 0;
   }
 
-  int raw_db_idx[MAX_ARRAY_SIZE];
-  for(int i=0; i<MAX_ARRAY_SIZE; i++) {
+  int raw_db_idx[MAX_ARRAY_SIZE] = {3, 8};
+  for(int i=2; i<MAX_ARRAY_SIZE; i++) {
     raw_db_idx[i] = -1;
-  }
-
-  int raw_query_params[3];
-  for(int i=0; i<3; i++) {
-    raw_query_params[i] = -1;
-  }
-
-  char raw_result[MAX_ARRAY_SIZE];
-  for(int i=0; i<MAX_ARRAY_SIZE; i++) {
-    raw_result[i] = 0;
   }
 
   auto db = TfheString::Encrypt(raw_db, key);
   auto db_idx = TfheArray<int32_t>::Encrypt(raw_db_idx, key);
-  auto query_params = TfheArray<int32_t>::Encrypt(raw_query_params, key);
-  auto result = TfheString::Encrypt(raw_result, key);
 
   while(true){
-    std::string input;
-    getline(std::cin, input);
+    int raw_query_params[3];
+    for(int i=0; i<3; i++) {
+      raw_query_params[i] = -1;
+    }
+    
+    char raw_result[MAX_ARRAY_SIZE];
+    for(int i=0; i<MAX_ARRAY_SIZE; i++) {
+      raw_result[i] = 0;
+    }
+    auto result = TfheString::Encrypt(raw_result, key);
 
     char input_chars[MAX_ARRAY_SIZE];
-    for(int i=0; i<MAX_ARRAY_SIZE && i<input.size(); i++) {
-      input_chars[i] = input[i];
+
+    std::cout << "Please enter the operation type: \n" 
+                 "1: Read all \n"
+                 "2: Search \n"
+                 "3: Insert \n"
+                 "4: Count \n"
+    << std::endl;
+
+    int op_type;
+    std::cin >> op_type;
+
+    if(op_type == 1) {
+      raw_query_params[0] = 1;
+    } else if(op_type == 2) {
+      raw_query_params[0] = 2;
+
+      std::cout << "Please enter the query: \n"  << std::endl;
+
+      std::string input;
+      getline(std::cin, input);
+
+      for(int i=0; i<MAX_ARRAY_SIZE && i<input.size(); i++) {
+        input_chars[i] = input[i];
+      }
+
+      raw_query_params[1] = input.size();
     }
 
+    auto query_params = TfheArray<int32_t>::Encrypt(raw_query_params, key);
+   
     auto query = TfheString::Encrypt(input_chars, key);
 
     // TfheString result = {MAX_ARRAY_SIZE, params};

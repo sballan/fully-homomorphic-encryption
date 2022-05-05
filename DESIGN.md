@@ -35,4 +35,13 @@ void database_operation(
 }
 ```
 
+query_params:
+[
+  type,
+  index of the last char of the key plus 1,
+  index of the last char of the value plus 1
+]
 
+## UI
+1) User enters the type of operation they want to perform
+2) 
