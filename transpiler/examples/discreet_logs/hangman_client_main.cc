@@ -67,7 +67,7 @@ int main() {
   auto query_params = TfheArray<int32_t>::Encrypt(raw_query_params, key);
   auto result = TfheString::Encrypt(raw_result, key);
 
-  for(int i=0; i<3; i++){
+  while(true){
     std::string input;
     getline(std::cin, input);
 
