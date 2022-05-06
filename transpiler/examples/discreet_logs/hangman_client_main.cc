@@ -23,6 +23,7 @@
 #include <string>
 
 #include "transpiler/data/tfhe_data.h"
+#include "transpiler/examples/discreet_logs/discreet_logs_select_index_tfhe.h"
 #include "transpiler/examples/discreet_logs/hangman_api_tfhe.h"
 #include "transpiler/examples/discreet_logs/hangman_client.h"
 #include "xls/common/logging/logging.h"
@@ -102,17 +103,23 @@ int main() {
 
     // TfheString result = {MAX_ARRAY_SIZE, params};
 
-    XLS_CHECK_OK(
-      hangmanMakeMove(
-        db, 
-        db_idx, 
-        query, 
-        query_params,
-        result, 
-        key.cloud())
-        );
+    // XLS_CHECK_OK(
+    //   hangmanMakeMove(
+    //     db, 
+    //     db_idx, 
+    //     query, 
+    //     query_params,
+    //     result, 
+    //     key.cloud())
+    //     );
+
+    auto foo = TfheString::Encrypt("abcd", key);
+    XLS_CHECK_OK(selectIndex(foo, key.cloud()));
+
+
   
-    auto output = result.Decrypt(key);
+    // auto output = result.Decrypt(key);
+    auto output = foo.Decrypt(key);
 
     std::cout << output << "\n";
     std::cout << "\n";
