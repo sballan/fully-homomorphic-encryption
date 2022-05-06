@@ -42,6 +42,9 @@ query_params:
   index of the last char of the value plus 1
 ]
 
+db = "KeyValueTitleContent"
+db_index = [3,8,13,20,-1]
+
 ## UI
 1) User enters the type of operation they want to perform
 2) 
