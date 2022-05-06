@@ -30,6 +30,9 @@ void hangmanMakeMove(
   } else if(query_params[0] == 2) {
     // When we start, we know that the key starts at 0
     int key_start = 0;
+    bool value_found = false;
+    int value_end = 0;
+    int cursor = 0;
     // Iterate over the db_idx, to look at keys
     #pragma hls_unroll yes
     for(int i=0; i<MAX_ARRAY_SIZE; i+=2) {
@@ -38,12 +41,12 @@ void hangmanMakeMove(
 
       int key_end = db_idx[i];
       int value_end = db_idx[i+1];
-      int cursor = key_start;
+      cursor = key_start;
 
       #pragma hls_unroll yes
       for(int j=0; j<MAX_ARRAY_SIZE; j+=1) {
         // Break if we know we'll read empty data (and seg fault)
-        if (j >= query_params[1]) break;
+        // if (j >= query_params[1]) break;
 
         if(query[j] != db[cursor]){
           // In this condition, a character didn't match the query.
@@ -51,18 +54,22 @@ void hangmanMakeMove(
           key_start = value_end;
           break;
         } else if(cursor == key_end-1) {
-          // The key is an exact match, and the cursor is on the last
-          // character of the key. Move the cursor forward, and copy 
-          // the value to the result.
-          cursor += 1;
-          #pragma hls_unroll yes
-          for(int k=0; k<MAX_ARRAY_SIZE; k++) {
-            if(cursor == value_end) break;
-            result[k] = db[cursor];
-          }
+          // value_found = true;
+          cursor+=1;
+          break;
         }
         cursor+=1;    
       }
     }
+
+    
+    if(value_found){
+      #pragma hls_unroll yes
+      for(int i=0; i<MAX_ARRAY_SIZE; i+=1) {
+        if(cursor == value_end) break;
+        result[i] = db[cursor] ;
+        cursor+=1;
+      }
+    } 
   }
 }

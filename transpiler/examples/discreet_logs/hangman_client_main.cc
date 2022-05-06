@@ -42,12 +42,12 @@ int main() {
 
   std::cout << "Welcome to Discreet Logs" << std::endl;
 
-  char raw_db[MAX_ARRAY_SIZE] = {"KeyValue"};
-  for(int i=8; i<MAX_ARRAY_SIZE; i++) {
+  char raw_db[MAX_ARRAY_SIZE] = {"KeVa"};
+  for(int i=4; i<MAX_ARRAY_SIZE; i++) {
     raw_db[i] = 0;
   }
 
-  int raw_db_idx[MAX_ARRAY_SIZE] = {3, 8};
+  int raw_db_idx[MAX_ARRAY_SIZE] = {2, 4};
   for(int i=2; i<MAX_ARRAY_SIZE; i++) {
     raw_db_idx[i] = -1;
   }
