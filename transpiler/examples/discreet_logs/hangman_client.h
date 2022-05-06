@@ -17,7 +17,9 @@
 
 #include <string>
 
-#include "transpiler/examples/discreet_logs/hangman_api.h"
+// #include "transpiler/examples/discreet_logs/hangman_api.h"
+#include "transpiler/examples/discreet_logs/discreet_logs_select_index.h"
+
 
 std::string update_current_word(char input_letter, int move_result,
                                 std::string current_word);

@@ -4,7 +4,11 @@
 const int MAX_ARRAY_SIZE = 5;
 
 void selectIndex(
-  char result[MAX_ARRAY_SIZE]
+  char db[MAX_ARRAY_SIZE], 
+  int db_idx[MAX_ARRAY_SIZE], 
+  char query[MAX_ARRAY_SIZE], 
+  int query_params[2], 
+  int result[1]
 );
 
 #endif  // FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_DISCREET_LOGS_DISCREET_LOGS_SELECT_INDEX_H

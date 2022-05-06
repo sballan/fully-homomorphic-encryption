@@ -113,15 +113,16 @@ int main() {
     //     key.cloud())
     //     );
 
-    auto foo = TfheString::Encrypt("abcd", key);
-    XLS_CHECK_OK(selectIndex(foo, key.cloud()));
+    auto params = TfheArray<int32_t>::Encrypt({-1, -1}, key);
+    auto foo = TfheArray<int32_t>::Encrypt({-1}, key);
+    XLS_CHECK_OK(selectIndex(db, db_idx, query, params, foo, key.cloud()));
 
 
   
     // auto output = result.Decrypt(key);
     auto output = foo.Decrypt(key);
 
-    std::cout << output << "\n";
+    std::cout << output[0];
     std::cout << "\n";
   }
 
