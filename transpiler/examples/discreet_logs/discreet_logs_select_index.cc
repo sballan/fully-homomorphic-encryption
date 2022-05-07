@@ -17,5 +17,5 @@ void selectIndex(
       return;
     }
   }
-  result[0] == 1;
+  result[0] = 1;
 }
