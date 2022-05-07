@@ -12,11 +12,12 @@ void selectIndex(
   } 
 
 #pragma hls_unroll yes
-  for(int i=0; i<MAX_SIZE/2; i++) {
+  for(int i=0; i<3; i++) {
     if(query[i] != record[i]) {
       result[0] = 0;
       return;
     }
   }
+
   result[0] = 1;
 }

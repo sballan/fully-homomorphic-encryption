@@ -32,6 +32,9 @@
 constexpr int kMainMinimumLambda = 120;
 
 int main() {
+  std::cout << "Starting..." << std::endl;
+
+  std::cout << "Setting key parameters" << std::endl;
   // generate a keyset
   TFHEParameters params(kMainMinimumLambda);
 
@@ -41,35 +44,22 @@ int main() {
   std::array<uint32_t, 3> seed = {314, 1592, 657};
   TFHESecretKeySet key(params, seed);
 
-  std::cout << "Welcome to Discreet Logs" << std::endl;
+  std::cout << "Starting initial database handshake" << std::endl;
 
-  char raw_db[MAX_ARRAY_SIZE] = {"KeyVal"};
-  for(int i=6; i<MAX_ARRAY_SIZE; i++) {
-    raw_db[i] = 0;
-  }
+  char raw_record1[16] = {'K', 'e', 'y', 0, 0, 0, 0, 0, 'V', 'a', 'l', 0, 0, 0, 0, 0};
+  auto record1 = TfheString::Encrypt(raw_record1, key);
 
-  int raw_db_idx[MAX_ARRAY_SIZE] = {3, 6};
-  for(int i=2; i<MAX_ARRAY_SIZE; i++) {
-    raw_db_idx[i] = -1;
-  }
+  std::cout << "Record1 is" << raw_record1 << std::endl;
 
-  auto db = TfheString::Encrypt(raw_db, key);
-  auto db_idx = TfheArray<int>::Encrypt(raw_db_idx, key);
+  // records are seralized, sent to carol, and persisted.  all future accesses of records happen by carol
 
-  // db is seralized, sent to carol, and persisted.  all future accesses of db happen by carol
+  std::cout << "Database handshake complete\n\n" << std::endl;
 
-  while(true){
-    int raw_query_params[3];
-    for(int i=0; i<3; i++) {
-      raw_query_params[i] = -1;
-    }
-    
-    char raw_result[MAX_ARRAY_SIZE];
-    for(int i=0; i<MAX_ARRAY_SIZE; i++) {
-      raw_result[i] = 0;
-    }
-    
-    char input_chars[MAX_ARRAY_SIZE];
+  std::cout << "Welcome to Discreet Logs!" << std::endl;
+  
+  int op_type;
+  for(int i=0; i<5;i++) {
+    op_type = -1;
 
     std::cout << "Please enter the operation type: \n" 
                  "1: Read all \n"
@@ -78,54 +68,42 @@ int main() {
                  "4: Count \n"
     << std::endl;
 
-    int op_type;
     std::cin >> op_type;
 
     if(op_type == 1) {
-      raw_query_params[0] = 1;
+      
     } else if(op_type == 2) {
-      raw_query_params[0] = 2;
+      int raw_result[1] = {0};
 
-      std::cout << "Please enter the query: \n"  << std::endl;
+      char input_chars[16];
+      std::cout << "Please enter the query (max size 8 chars): \n"  << std::endl;
 
       std::string input;
       getline(std::cin, input);
 
-      for(int i=0; i<MAX_ARRAY_SIZE && i<input.size(); i++) {
-        input_chars[i] = input[i];
+      for(int i=0; i<16; i++) {
+        if(i < input.size()) {
+          input_chars[i] = input[i];
+        } else {
+          input_chars[i] = 0;
+        }      
       }
 
-      raw_query_params[1] = input.size();
+      // input_chars[16] = {'K', 'e', 'y', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+         
+      auto query = TfheString::Encrypt(input_chars, key);
+      auto result = TfheArray<int>::Encrypt(raw_result, key);
+
+      XLS_CHECK_OK(selectIndex(record1, query, result, key.cloud()));
+
+      auto output = result.Decrypt(key);
+
+      std::cout << output[0];
+      std::cout << "\n" << std::endl;
+
+      std::cin.clear();
     }
-
-    auto query_params = TfheArray<int32_t>::Encrypt(raw_query_params, key);
-   
-    auto query = TfheString::Encrypt(input_chars, key);
-    auto result = TfheString::Encrypt(raw_result, key);
-
-    // XLS_CHECK_OK(
-    //   hangmanMakeMove(
-    //     db, 
-    //     db_idx, 
-    //     query, 
-    //     query_params,
-    //     result,
-    //     key.cloud())
-    //     );
-
-    auto db_test = TfheString::Encrypt("012345678912345", key);
-    auto query_test = TfheString::Encrypt("012345678912345", key);
-    auto result_test = TfheArray<int>::Encrypt({-1}, key);
-    XLS_CHECK_OK(selectIndex(db_test, query_test, result_test, key.cloud()));
-
-
-    // auto output = result.Decrypt(key);
-    auto output = result_test.Decrypt(key);
-
-    std::cout << output[0];
-    std::cout << "\n";
   }
-
 
   return 0;
 }
