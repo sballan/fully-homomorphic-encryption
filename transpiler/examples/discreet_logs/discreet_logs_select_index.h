@@ -6,7 +6,7 @@ const unsigned short MAX_SIZE = 16;
 void selectIndex(
   char record[MAX_SIZE], 
   char query[MAX_SIZE], 
-  int result[1]
+  char result[MAX_SIZE/2+1]
 );
 
 #endif  // FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_DISCREET_LOGS_DISCREET_LOGS_SELECT_INDEX_H

@@ -47,10 +47,13 @@ int main() {
   std::cout << "Starting initial database handshake" << std::endl;
 
   char raw_record1[16] = {'K', 'e', 'y', 0, 0, 0, 0, 0, 'V', 'a', 'l', 0, 0, 0, 0, 0};
-  auto record1 = TfheString::Encrypt(raw_record1, key);
+  char raw_record2[16] = {'M', 'y', 0, 0, 0, 0, 0, 0, 'C', 'o', 'n', 't', 'e', 'n', 't', 0};
+  char raw_blank_record[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-  std::vector<TfheString*> db;
-  db.push_back(&record1);
+  TfheString record1 = TfheString::Encrypt(raw_record1, key);
+  TfheString record2 = TfheString::Encrypt(raw_record2, key);
+
+  int db_size = 1;
 
   std::cout << "Record1 is" << raw_record1 << std::endl;
 
@@ -76,7 +79,7 @@ int main() {
     if(op_type == 1) {
       
     } else if(op_type == 2) {
-      int raw_result[1] = {0};
+      char raw_result[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
       char input_chars[16];
       std::cout << "Please enter the query (max size 8 chars): \n"  << std::endl;
@@ -97,13 +100,14 @@ int main() {
       }
               
       auto query = TfheString::Encrypt(input_chars, key);
-      auto result = TfheArray<int>::Encrypt(raw_result, key);
+      auto result = TfheString::Encrypt(raw_result, key);
 
       XLS_CHECK_OK(selectIndex(record1, query, result, key.cloud()));
+      XLS_CHECK_OK(selectIndex(record2, query, result, key.cloud()));
 
       auto output = result.Decrypt(key);
 
-      std::cout << output[0];
+      std::cout << output;
       std::cout << "\n" << std::endl;
     } else if(op_type == 3) {
       char input_chars[16];
@@ -139,9 +143,7 @@ int main() {
         }      
       }
 
-      auto new_record = TfheString::Encrypt(input_chars, key);
-
-      db.push_back(&new_record);
+      // record2 = TfheString::Encrypt(input_chars, key);
     }
   }
 
