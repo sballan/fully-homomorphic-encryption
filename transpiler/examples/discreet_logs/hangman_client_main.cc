@@ -56,6 +56,8 @@ int main() {
   auto db = TfheString::Encrypt(raw_db, key);
   auto db_idx = TfheArray<int>::Encrypt(raw_db_idx, key);
 
+  // db is seralized, sent to carol, and persisted.  all future accesses of db happen by carol
+
   while(true){
     int raw_query_params[3];
     for(int i=0; i<3; i++) {
@@ -101,26 +103,26 @@ int main() {
     auto query = TfheString::Encrypt(input_chars, key);
     auto result = TfheString::Encrypt(raw_result, key);
 
-    XLS_CHECK_OK(
-      hangmanMakeMove(
-        db, 
-        db_idx, 
-        query, 
-        query_params,
-        result, 
-        key.cloud())
-        );
+    // XLS_CHECK_OK(
+    //   hangmanMakeMove(
+    //     db, 
+    //     db_idx, 
+    //     query, 
+    //     query_params,
+    //     result,
+    //     key.cloud())
+    //     );
 
-    // auto params = TfheArray<short>::Encrypt({-1, -1}, key);
-    // auto foo = TfheArray<short>::Encrypt({-1}, key);
-    // XLS_CHECK_OK(selectIndex(db, db_idx, query, params, foo, key.cloud()));
+    auto db_test = TfheString::Encrypt("012345678912345", key);
+    auto query_test = TfheString::Encrypt("012345678912345", key);
+    auto result_test = TfheArray<int>::Encrypt({-1}, key);
+    XLS_CHECK_OK(selectIndex(db_test, query_test, result_test, key.cloud()));
 
 
-  
-    auto output = result.Decrypt(key);
-    // auto output = foo.Decrypt(key);
+    // auto output = result.Decrypt(key);
+    auto output = result_test.Decrypt(key);
 
-    std::cout << output;
+    std::cout << output[0];
     std::cout << "\n";
   }
 
