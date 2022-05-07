@@ -7,6 +7,7 @@ void selectIndex(
   int result[1]
 ) {
   if(result[0] == 1){
+    result[0] = 1;    // This is meant to alter the ciphertext even though the plaintext doesn't change
     return;
   } 
 
