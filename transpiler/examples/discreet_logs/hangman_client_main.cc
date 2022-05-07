@@ -49,6 +49,9 @@ int main() {
   char raw_record1[16] = {'K', 'e', 'y', 0, 0, 0, 0, 0, 'V', 'a', 'l', 0, 0, 0, 0, 0};
   auto record1 = TfheString::Encrypt(raw_record1, key);
 
+  std::vector<TfheString*> db;
+  db.push_back(&record1);
+
   std::cout << "Record1 is" << raw_record1 << std::endl;
 
   // records are seralized, sent to carol, and persisted.  all future accesses of records happen by carol
@@ -77,20 +80,22 @@ int main() {
 
       char input_chars[16];
       std::cout << "Please enter the query (max size 8 chars): \n"  << std::endl;
-
+      
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::string input;
-      getline(std::cin, input);
+      std::cin >> input;
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+      std::cout << "*" << input << "*" << std::endl;
 
       for(int i=0; i<16; i++) {
-        if(i < input.size()) {
+        if(i < input.size() && input[i] != '\n') {
           input_chars[i] = input[i];
         } else {
-          input_chars[i] = 0;
+          input_chars[i] = 0; 
         }      
       }
-
-      // input_chars[16] = {'K', 'e', 'y', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-         
+              
       auto query = TfheString::Encrypt(input_chars, key);
       auto result = TfheArray<int>::Encrypt(raw_result, key);
 
@@ -100,8 +105,43 @@ int main() {
 
       std::cout << output[0];
       std::cout << "\n" << std::endl;
+    } else if(op_type == 3) {
+      char input_chars[16];
+      std::cout << "Please enter the title (max size 8 chars): \n"  << std::endl;
+      
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::string input;
+      std::cin >> input;
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cout << "*" << input << "*" << std::endl;
 
-      std::cin.clear();
+      for(int i=0; i<8; i++) {
+        if(i < input.size() && input[i] != '\n') {
+          input_chars[i] = input[i];
+        } else {
+          input_chars[i] = 0; 
+        }      
+      }
+
+      std::cout << "Please enter the content (max size 8 chars): \n"  << std::endl;
+      
+      std::string input2;
+      // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cin >> input2;
+      // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cout << "*" << input2 << "*" << std::endl;
+
+      for(int i=8; i<16; i++) {
+        if(i < input2.size() && input2[i] != '\n') {
+          input_chars[i] = input2[i];
+        } else {
+          input_chars[i] = 0; 
+        }      
+      }
+
+      auto new_record = TfheString::Encrypt(input_chars, key);
+
+      db.push_back(&new_record);
     }
   }
 
