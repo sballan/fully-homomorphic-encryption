@@ -43,18 +43,18 @@ int main() {
 
   std::cout << "Welcome to Discreet Logs" << std::endl;
 
-  char raw_db[MAX_ARRAY_SIZE] = {"KeVa"};
-  for(int i=4; i<MAX_ARRAY_SIZE; i++) {
+  char raw_db[MAX_ARRAY_SIZE] = {"KeyVal"};
+  for(int i=6; i<MAX_ARRAY_SIZE; i++) {
     raw_db[i] = 0;
   }
 
-  int raw_db_idx[MAX_ARRAY_SIZE] = {2, 4};
+  int raw_db_idx[MAX_ARRAY_SIZE] = {3, 6};
   for(int i=2; i<MAX_ARRAY_SIZE; i++) {
     raw_db_idx[i] = -1;
   }
 
   auto db = TfheString::Encrypt(raw_db, key);
-  auto db_idx = TfheArray<int32_t>::Encrypt(raw_db_idx, key);
+  auto db_idx = TfheArray<int>::Encrypt(raw_db_idx, key);
 
   while(true){
     int raw_query_params[3];
@@ -66,8 +66,7 @@ int main() {
     for(int i=0; i<MAX_ARRAY_SIZE; i++) {
       raw_result[i] = 0;
     }
-    auto result = TfheString::Encrypt(raw_result, key);
-
+    
     char input_chars[MAX_ARRAY_SIZE];
 
     std::cout << "Please enter the operation type: \n" 
@@ -100,29 +99,28 @@ int main() {
     auto query_params = TfheArray<int32_t>::Encrypt(raw_query_params, key);
    
     auto query = TfheString::Encrypt(input_chars, key);
+    auto result = TfheString::Encrypt(raw_result, key);
 
-    // TfheString result = {MAX_ARRAY_SIZE, params};
+    XLS_CHECK_OK(
+      hangmanMakeMove(
+        db, 
+        db_idx, 
+        query, 
+        query_params,
+        result, 
+        key.cloud())
+        );
 
-    // XLS_CHECK_OK(
-    //   hangmanMakeMove(
-    //     db, 
-    //     db_idx, 
-    //     query, 
-    //     query_params,
-    //     result, 
-    //     key.cloud())
-    //     );
-
-    auto params = TfheArray<int32_t>::Encrypt({-1, -1}, key);
-    auto foo = TfheArray<int32_t>::Encrypt({-1}, key);
-    XLS_CHECK_OK(selectIndex(db, db_idx, query, params, foo, key.cloud()));
+    // auto params = TfheArray<short>::Encrypt({-1, -1}, key);
+    // auto foo = TfheArray<short>::Encrypt({-1}, key);
+    // XLS_CHECK_OK(selectIndex(db, db_idx, query, params, foo, key.cloud()));
 
 
   
-    // auto output = result.Decrypt(key);
-    auto output = foo.Decrypt(key);
+    auto output = result.Decrypt(key);
+    // auto output = foo.Decrypt(key);
 
-    std::cout << output[0];
+    std::cout << output;
     std::cout << "\n";
   }
 

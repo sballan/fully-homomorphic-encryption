@@ -22,8 +22,7 @@ void hangmanMakeMove(
   int query_params[3], 
   char result[MAX_ARRAY_SIZE]
 ) {
-  if(false) {
-  // if(query_params[0] == 1) {
+  if(query_params[0] == 1) {
     #pragma hls_unroll yes
     for(int i=0; i<MAX_ARRAY_SIZE; i++) {
       result[i] = db[i];
@@ -58,8 +57,8 @@ void hangmanMakeMove(
           value_found = true;
           cursor+=1;
           continue;
-        } else if(true) {
-          // result[0] = 'a';
+        } else if(value_found) {
+          // result[cursor] = db[cursor];
         }
         cursor+=1;    
       }
