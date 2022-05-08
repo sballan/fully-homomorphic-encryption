@@ -7,7 +7,11 @@ void insert(
   int result[1+1]
 ) {
   // Return if we already inserted
-  if(result[0] == 1) return;
+  if(result[0] == 1) {
+    record[16+1]++;
+    result[1]++;
+    return;
+  }
 
   // Return if record is not blank
   if(record[0] != '\0') {

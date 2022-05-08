@@ -61,7 +61,7 @@ int main() {
   std::vector<TfheString*> db;
   db.push_back(&demo_record);
   db.push_back(&blank_record1);
-  db.push_back(&blank_record2);
+  // db.push_back(&blank_record2);
 
   // records are seralized, sent to carol, and persisted.  all future accesses of records happen by carol
 
@@ -102,8 +102,7 @@ int main() {
       std::cout << "\n" << std::endl;      
     } else if(op_type == 2) {
       char raw_result[8+1] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-      char input_chars[16];
+      char input_chars[8];
       std::cout << "Please enter the query (max size 8 chars): \n"  << std::endl;
       
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -113,7 +112,7 @@ int main() {
 
       std::cout << "*" << input << "*" << std::endl;
 
-      for(int i=0; i<16; i++) {
+      for(int i=0; i<8; i++) {
         if(i < input.size() && input[i] != '\n') {
           input_chars[i] = input[i];
         } else {
@@ -179,7 +178,7 @@ int main() {
       auto result = TfheArray<int>::Encrypt(raw_result, key);
 
       for(int i=0; i<db.size();i++) {
-        XLS_CHECK_OK(insert(*db[db_size], query, result, key.cloud()));
+        XLS_CHECK_OK(insert(*db[i], query, result, key.cloud()));
       }
 
       auto output = result.Decrypt(key);
@@ -211,7 +210,7 @@ int main() {
       auto result = TfheArray<int>::Encrypt(raw_result, key);
 
       for(int i=0; i<db.size();i++) {
-        XLS_CHECK_OK(insert(*db[i], query, result, key.cloud()));
+        XLS_CHECK_OK(count(*db[i], query, result, key.cloud()));
       }
 
       auto output = result.Decrypt(key);

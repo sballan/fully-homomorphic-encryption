@@ -6,6 +6,7 @@ void readAll(
   int counter[1+1],
   char result[32+1]
 ) {
+  // Return if record is blank
   if(record[0] == '\0') {
     record[16+1]++;
     counter[1]++;

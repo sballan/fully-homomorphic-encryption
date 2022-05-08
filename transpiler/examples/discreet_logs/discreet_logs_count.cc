@@ -6,6 +6,7 @@ void count(
   char query[8], 
   int result[1+1]
 ) {
+  // Return if record is blank
   if(record[0] == '\0') {
     result[1]++;
     return;
