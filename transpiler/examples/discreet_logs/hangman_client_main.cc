@@ -141,6 +141,11 @@ int main() {
     } else if(op_type == 3) {
       int raw_result[1+1] = {0,0};
       char input_chars[INSERT_MAX];
+      
+      for(int i=0;i<INSERT_MAX;i++) {
+        input_chars[i] = 0;
+      }
+
       std::cout << "Please enter the title (max size "<< INSERT_MAX/2 <<" chars): \n"  << std::endl;
       
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
