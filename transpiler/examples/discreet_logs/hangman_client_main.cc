@@ -66,12 +66,12 @@ int main() {
   db.push_back(&record1);
   db.push_back(&record2);
   db.push_back(&record3);
-  // db.push_back(&record4);
-  // db.push_back(&record5);
+  db.push_back(&record4);
+  db.push_back(&record5);
 
   int db_size = 2;
 
-  std::cout << "Record1 is" << raw_record1 << std::endl;
+  std::cout << "DB has " << db_size << " records." << std::endl;
 
   // records are seralized, sent to carol, and persisted.  all future accesses of records happen by carol
 
@@ -136,7 +136,7 @@ int main() {
       // XLS_CHECK_OK(selectIndex(record1, query, result, key.cloud()));
       // XLS_CHECK_OK(selectIndex(record2, query, result, key.cloud()));
 
-      for(int i=0; i<db.size();i++) {
+      for(int i=0; i<db_size;i++) {
         XLS_CHECK_OK(selectIndex(*db[i], query, result, key.cloud()));
       }
 
@@ -153,7 +153,7 @@ int main() {
       std::string input;
       std::cin >> input;
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      std::cout << "*" << input << "*" << std::endl;
+      // std::cout << "*" << input << "*" << std::endl;
 
       for(int i=0; i<8; i++) {
         if(i < input.size() && input[i] != '\n') {
@@ -162,6 +162,7 @@ int main() {
           input_chars[i] = 0; 
         }      
       }
+      std::cout << "*" << input_chars << "*" << std::endl;
 
       std::cout << "Please enter the content (max size 8 chars): \n"  << std::endl;
       
@@ -169,28 +170,33 @@ int main() {
       // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::cin >> input2;
       // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      std::cout << "*" << input2 << "*" << std::endl;
+      // std::cout << "*" << input2 << "*" << std::endl;
 
-      for(int i=8; i<16; i++) {
+      for(int i=0; i<8; i++) {
         if(i < input2.size() && input2[i] != '\n') {
-          input_chars[i] = input2[i];
+          input_chars[i+8] = input2[i];
         } else {
-          input_chars[i] = 0; 
+          input_chars[i+8] = 0; 
         }      
       }
+
+      std::cout << "*";
+      for(int i=8; i<16; i++) {
+        std::cout << input_chars[i];
+      }
+      std::cout << "*";
+      std::cout << std::endl;
       
       auto query = TfheString::Encrypt(input_chars, key);
       auto result = TfheArray<int>::Encrypt(raw_result, key);
 
-      auto new_record = db[db_size-1];
-      XLS_CHECK_OK(insert(*db[db_size-1], query, result, key.cloud()));
+      XLS_CHECK_OK(insert(*db[db_size], query, result, key.cloud()));
       db_size++;
 
       auto output = result.Decrypt(key);
       std::cout << output[0];
+      std::cout << output[1];
       std::cout << "\n" << std::endl;
-
-      db.push_back(&record3);
     } else if(op_type == 4) {
       int raw_result[2] = {0, 0};
 
