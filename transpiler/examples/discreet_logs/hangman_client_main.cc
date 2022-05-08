@@ -21,6 +21,7 @@
 #include <iostream>
 #include <locale>
 #include <string>
+#include <time.h>
 
 void count(
   char record[16+1], 
@@ -33,6 +34,7 @@ void count(
     return;
   }
 
+  #pragma hls_unroll yes
   for(int i=0; i<16/2; i++) {
     if(query[i] != record[i]) {
       if(query[i] == '*') {
@@ -131,7 +133,9 @@ int main() {
 
   std::cout << "Starting initial database handshake" << std::endl;
 
-  char demo_record[16+1] = {'T', 'i', 't', 'l', 'e', 0, 0, 0, 'C', 'o', 'n', 't', 'e', 'n', 't', 0, 0};
+  char demo1_record[16+1] = {'T', 'i', 't', 'l', 'e', 0, 0, 0, 'C', 'o', 'n', 't', 'e', 'n', 't', 0, 0};
+  char demo2_record[16+1] = {'C', 'l', 'a', 's', 's', 's', 0, 0, '2', '0', '2', '2', 0, 0, 0, 0, 0};
+  char demo3_record[16+1] = {'C', 'i', 't', 'y', 0, 0, 0, 0, 'N', 'Y', 'C', 0, 0, 0, 0, 0, 0};
   char blank_record[16+1] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
@@ -142,7 +146,7 @@ int main() {
   std::cout << "Welcome to Discreet Logs!" << std::endl;
   
   int op_type;
-  for(int i=0; i<5;i++) {
+  while(true) {
     op_type = -1;
 
     std::cout << "Please enter the operation type: \n" 
@@ -155,15 +159,19 @@ int main() {
     std::cin >> op_type;
 
     if(op_type == 1) {
+      
       int raw_counter[2] = {0, 0};
       char raw_result[32+1];
       for(int i=0;i<(32+1);i++) {
         raw_result[i] = 0;
       }
 
-
-        readAll(demo_record, raw_counter, raw_result);
+        clock_t tStart = clock();
+        readAll(demo1_record, raw_counter, raw_result);
+        readAll(demo2_record, raw_counter, raw_result);
+        readAll(demo3_record, raw_counter, raw_result);
         readAll(blank_record, raw_counter, raw_result);
+        printf("Time taken: %.10fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 
 
       auto output = raw_result;
@@ -182,6 +190,7 @@ int main() {
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
       std::cout << "*" << input << "*" << std::endl;
+      clock_t tStart = clock();
 
       for(int i=0; i<8; i++) {
         if(i < input.size() && input[i] != '\n') {
@@ -190,8 +199,10 @@ int main() {
           input_chars[i] = 0; 
         }      
       }
-              
-      selectIndex(demo_record, input_chars, result);
+      printf("Time taken: %.10fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);        
+      selectIndex(demo1_record, input_chars, result);
+      selectIndex(demo2_record, input_chars, result);
+      selectIndex(demo3_record, input_chars, result);
       selectIndex(blank_record, input_chars, result);
 
 
@@ -212,6 +223,7 @@ int main() {
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       // std::cout << "*" << input << "*" << std::endl;
 
+      clock_t tStart = clock();
       for(int i=0; i<8; i++) {
         if(i < input.size() && input[i] != '\n') {
           input_chars[i] = input[i];
@@ -244,9 +256,12 @@ int main() {
       std::cout << "*";
       std::cout << std::endl;
       
-        insert(demo_record, input_chars, result);
+        insert(demo1_record, input_chars, result);
+        insert(demo2_record, input_chars, result);
+        insert(demo3_record, input_chars, result);
         insert(blank_record, input_chars, result);
 
+      printf("Time taken: %.10fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);        
 
       auto output = result;
       std::cout << output[0];
@@ -265,7 +280,7 @@ int main() {
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
       std::cout << "*" << input << "*" << std::endl;
-
+      clock_t tStart = clock();
       for(int i=0; i<16; i++) {
         if(i < input.size() && input[i] != '\n') {
           input_chars[i] = input[i];
@@ -274,11 +289,14 @@ int main() {
         }      
       }
               
-        count(demo_record, input_chars, result);
+        count(demo1_record, input_chars, result);
+        count(demo2_record, input_chars, result);
+        count(demo3_record, input_chars, result);
         count(blank_record, input_chars, result);
 
 
       auto output = result;
+      printf("Time taken: %.10fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);        
 
       std::cout << output[0];
       std::cout << "\n" << std::endl;
