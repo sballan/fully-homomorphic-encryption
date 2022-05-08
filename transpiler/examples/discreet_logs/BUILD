@@ -16,16 +16,25 @@ cc_library(
     deps = [],
 )
 
+cc_library(
+    name = "discreet_logs_count",
+    srcs = ["discreet_logs_count.cc"],
+    hdrs = ["discreet_logs_count.h"],
+    deps = [],
+)
+
 cc_binary(
     name = "hangman_client",
     srcs = [
         "hangman_api.h",
         "discreet_logs_select_index.h",
+        "discreet_logs_count.h",
         "hangman_client_main.cc",
     ],
     deps = [
         ":hangman_api_tfhe",
         ":discreet_logs_select_index_tfhe",
+        ":discreet_logs_count_tfhe",
         ":hangman_client_lib",
         "//transpiler/data:tfhe_data",
         "@com_google_absl//absl/base",
@@ -55,6 +64,16 @@ fhe_cc_library(
     optimizer = "xls",
 )
 
+fhe_cc_library(
+    name = "discreet_logs_count_tfhe",
+    src = "discreet_logs_count.cc",
+    hdrs = ["discreet_logs_count.h"],
+    encryption = "tfhe",
+    num_opt_passes = 2,
+    interpreter = True,
+    optimizer = "xls",
+)
+
 cc_library(
     name = "hangman_client_lib",
     srcs = ["hangman_client.cc"],
@@ -64,6 +83,8 @@ cc_library(
         ":hangman_api_tfhe",
         ":discreet_logs_select_index",
         ":discreet_logs_select_index_tfhe",
+        ":discreet_logs_count",
+        ":discreet_logs_count_tfhe",
         "//transpiler/data:tfhe_data",
     ],
 )

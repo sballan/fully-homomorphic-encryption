@@ -7,7 +7,7 @@ void selectIndex(
   char result[MAX_SIZE/2 + 1]
 ) {
   if(result[0] != '\0'){
-    result[9]++;      // This is meant to alter the ciphertext even though the plaintext doesn't change
+    result[9]++;         // This is meant to alter the ciphertext even though the plaintext doesn't change
     return;
   } 
 

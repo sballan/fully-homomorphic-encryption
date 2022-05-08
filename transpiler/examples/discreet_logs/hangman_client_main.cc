@@ -24,6 +24,7 @@
 
 #include "transpiler/data/tfhe_data.h"
 #include "transpiler/examples/discreet_logs/discreet_logs_select_index_tfhe.h"
+#include "transpiler/examples/discreet_logs/discreet_logs_count_tfhe.h"
 #include "transpiler/examples/discreet_logs/hangman_api_tfhe.h"
 #include "transpiler/examples/discreet_logs/hangman_client.h"
 #include "xls/common/logging/logging.h"
@@ -144,6 +145,37 @@ int main() {
       }
 
       // record2 = TfheString::Encrypt(input_chars, key);
+    } else if(op_type == 4) {
+      int raw_result[2] = {0, 0};
+
+      char input_chars[16];
+      std::cout << "Please enter the query (max size 8 chars), use * for wildcard: \n"  << std::endl;
+      
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::string input;
+      std::cin >> input;
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+      std::cout << "*" << input << "*" << std::endl;
+
+      for(int i=0; i<16; i++) {
+        if(i < input.size() && input[i] != '\n') {
+          input_chars[i] = input[i];
+        } else {
+          input_chars[i] = 0; 
+        }      
+      }
+              
+      auto query = TfheString::Encrypt(input_chars, key);
+      auto result = TfheString::Encrypt(raw_result, key);
+
+      XLS_CHECK_OK(selectIndex(record1, query, result, key.cloud()));
+      XLS_CHECK_OK(selectIndex(record2, query, result, key.cloud()));
+
+      auto output = result.Decrypt(key);
+
+      std::cout << output[0];
+      std::cout << "\n" << std::endl;
     }
   }
 
