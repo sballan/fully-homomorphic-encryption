@@ -49,8 +49,11 @@ int main() {
 
   std::cout << "Starting initial database handshake" << std::endl;
 
-  char raw_demo_record[16+1] = {'T', 'i', 't', 'l', 'e', 0, 0, 0, 'C', 'o', 'n', 't', 'e', 'n', 't', 0, 0};
-  char raw_blank_record[16+1] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  // char raw_demo_record[16+1] = {'T', 'i', 't', 'l', 'e', 0, 0, 0, 'C', 'o', 'n', 't', 'e', 'n', 't', 0, 0};
+  // char raw_blank_record[16+1] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  char raw_demo_record[2+1] = {'T', 'C', 0};
+  char raw_blank_record[2+1] = {0, 0, 0};
 
 
   // The order of these can be randomized so we don't know all blank ciphers are at the end.
@@ -84,8 +87,8 @@ int main() {
 
     if(op_type == 1) {
       int raw_counter[2] = {0, 0};
-      char raw_result[32+1];
-      for(int i=0;i<(32+1);i++) {
+      char raw_result[READ_ALL_MAX*READ_ALL_COUNT+1];
+      for(int i=0;i<(READ_ALL_MAX*READ_ALL_COUNT+1);i++) {
         raw_result[i] = 0;
       }
 
@@ -101,9 +104,13 @@ int main() {
       std::cout << output;
       std::cout << "\n" << std::endl;      
     } else if(op_type == 2) {
-      char raw_result[8+1] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-      char input_chars[8];
-      std::cout << "Please enter the query (max size 8 chars): \n"  << std::endl;
+      char raw_result[SELECT_INDEX_MAX/2+1];
+      for(int i=0;i<SELECT_INDEX_MAX/2+1;i++) {
+        raw_result[i] = 0;
+      }
+
+      char input_chars[SELECT_INDEX_MAX/2];
+      std::cout << "Please enter the query (max size " << SELECT_INDEX_MAX/2 << " chars): \n"  << std::endl;
       
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::string input;
@@ -112,7 +119,7 @@ int main() {
 
       std::cout << "*" << input << "*" << std::endl;
 
-      for(int i=0; i<8; i++) {
+      for(int i=0; i<SELECT_INDEX_MAX/2; i++) {
         if(i < input.size() && input[i] != '\n') {
           input_chars[i] = input[i];
         } else {
@@ -133,7 +140,7 @@ int main() {
       std::cout << "\n" << std::endl;
     } else if(op_type == 3) {
       int raw_result[1+1] = {0,0};
-      char input_chars[16];
+      char input_chars[INSERT_MAX];
       std::cout << "Please enter the title (max size 8 chars): \n"  << std::endl;
       
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -142,7 +149,7 @@ int main() {
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       // std::cout << "*" << input << "*" << std::endl;
 
-      for(int i=0; i<8; i++) {
+      for(int i=0; i<INSERT_MAX/2; i++) {
         if(i < input.size() && input[i] != '\n') {
           input_chars[i] = input[i];
         } else {
@@ -159,16 +166,16 @@ int main() {
       // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       // std::cout << "*" << input2 << "*" << std::endl;
 
-      for(int i=0; i<8; i++) {
+      for(int i=0; i<INSERT_MAX/2; i++) {
         if(i < input2.size() && input2[i] != '\n') {
-          input_chars[i+8] = input2[i];
+          input_chars[i+INSERT_MAX/2] = input2[i];
         } else {
-          input_chars[i+8] = 0; 
+          input_chars[i+INSERT_MAX/2] = 0; 
         }      
       }
 
       std::cout << "*";
-      for(int i=8; i<16; i++) {
+      for(int i=INSERT_MAX/2; i<INSERT_MAX; i++) {
         std::cout << input_chars[i];
       }
       std::cout << "*";
@@ -188,7 +195,7 @@ int main() {
     } else if(op_type == 4) {
       int raw_result[1+1] = {0, 0};
 
-      char input_chars[16];
+      char input_chars[COUNT_MAX];
       std::cout << "Please enter the query (max size 8 chars), use * for wildcard: \n"  << std::endl;
       
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -198,7 +205,7 @@ int main() {
 
       std::cout << "*" << input << "*" << std::endl;
 
-      for(int i=0; i<16; i++) {
+      for(int i=0; i<COUNT_MAX; i++) {
         if(i < input.size() && input[i] != '\n') {
           input_chars[i] = input[i];
         } else {

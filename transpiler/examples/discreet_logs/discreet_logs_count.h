@@ -1,9 +1,11 @@
 #ifndef FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_DISCREET_LOGS_DISCREET_LOGS_COUNT_H
 #define FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_DISCREET_LOGS_DISCREET_LOGS_COUNT_H
 
+const int COUNT_MAX=2;
+
 void count(
-  char record[16+1], 
-  char query[8], 
+  char record[COUNT_MAX+1], 
+  char query[COUNT_MAX/2], 
   int result[1+1]
 );
 

@@ -2,23 +2,23 @@
 
 #pragma hls_top
 void readAll(
-  char record[16+1], 
+  char record[READ_ALL_MAX+1], 
   int counter[1+1],
-  char result[32+1]
+  char result[READ_ALL_COUNT*READ_ALL_COUNT+1]
 ) {
   // Return if record is blank
   if(record[0] == '\0') {
-    record[16+1]++;
+    record[READ_ALL_COUNT+1]++;
     counter[1]++;
-    result[32+1]++;
+    result[READ_ALL_COUNT*READ_ALL_COUNT+1]++;
     return;
   }
 
   #pragma hls_unroll yes
-  for(int i=0; i<16; i++) {
+  for(int i=0; i<READ_ALL_MAX; i++) {
     result[counter[0]+i] = record[i];
   }
 
-  counter[0]+=16;
+  counter[0]+=READ_ALL_MAX;
   counter[1]++;
 }

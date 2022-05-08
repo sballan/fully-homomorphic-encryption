@@ -2,8 +2,8 @@
 
 #pragma hls_top
 void count(
-  char record[16+1], 
-  char query[8], 
+  char record[COUNT_MAX+1], 
+  char query[COUNT_MAX/2], 
   int result[1+1]
 ) {
   // Return if record is blank
@@ -13,7 +13,7 @@ void count(
   }
 
   #pragma hls_unroll yes
-  for(int i=0; i<16/2; i++) {
+  for(int i=0; i<COUNT_MAX/2; i++) {
     if(query[i] != record[i]) {
       if(query[i] == '*') {
         result[0]++;
