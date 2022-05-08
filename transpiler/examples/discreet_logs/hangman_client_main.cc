@@ -22,6 +22,56 @@
 #include <locale>
 #include <string>
 
+void count(
+  char record[16+1], 
+  char query[8], 
+  int result[1+1]
+) {
+  // Return if record is blank
+  if(record[0] == '\0') {
+    result[1]++;
+    return;
+  }
+
+  #pragma hls_unroll yes
+  for(int i=0; i<16/2; i++) {
+    if(query[i] != record[i]) {
+      if(query[i] == '*') {
+        result[0]++;
+      } else {
+        result[1]++;  // This is meant to alter the ciphertext even though the plaintext doesn't change
+      }
+      return;
+    }
+  }
+
+  result[0]++;
+}
+void insert(
+  char record[16+1], 
+  char query[16], 
+  int result[1+1]
+) {
+  // Return if we already inserted
+  if(result[0] == 1) {
+    record[16+1]++;
+    result[1]++;
+    return;
+  }
+
+  // Return if record is not blank
+  if(record[0] != '\0') {
+    record[16+1]++;
+    result[1]++;
+    return;
+  }
+
+  for(int i=0; i<16; i++) {
+    record[i] = query[i];
+  }
+
+  result[0]=1;
+}
 void selectIndex(
   char record[16+1], 
   char query[8], 
@@ -151,6 +201,88 @@ int main() {
       for (int i=0; i<8; i++){
         std::cout << output[i];
       }      std::cout << "\n" << std::endl;
+    }
+    else if(op_type == 3) {
+      int result[1+1] = {0,0};
+      char input_chars[16];
+      std::cout << "Please enter the title (max size 8 chars): \n"  << std::endl;
+      
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::string input;
+      std::cin >> input;
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      // std::cout << "*" << input << "*" << std::endl;
+
+      for(int i=0; i<8; i++) {
+        if(i < input.size() && input[i] != '\n') {
+          input_chars[i] = input[i];
+        } else {
+          input_chars[i] = 0; 
+        }      
+      }
+      std::cout << "*" << input_chars << "*" << std::endl;
+
+      std::cout << "Please enter the content (max size 8 chars): \n"  << std::endl;
+      
+      std::string input2;
+      // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cin >> input2;
+      // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      // std::cout << "*" << input2 << "*" << std::endl;
+
+      for(int i=0; i<8; i++) {
+        if(i < input2.size() && input2[i] != '\n') {
+          input_chars[i+8] = input2[i];
+        } else {
+          input_chars[i+8] = 0; 
+        }      
+      }
+
+      std::cout << "*";
+      for(int i=8; i<16; i++) {
+        std::cout << input_chars[i];
+      }
+      std::cout << "*";
+      std::cout << std::endl;
+      
+        insert(demo_record, input_chars, result);
+        insert(blank_record, input_chars, result);
+
+
+      auto output = result;
+      std::cout << output[0];
+      std::cout << output[1];
+      std::cout << "\n" << std::endl;
+    } 
+    else if(op_type == 4) {
+      int result[1+1] = {0, 0};
+
+      char input_chars[16];
+      std::cout << "Please enter the query (max size 8 chars), use * for wildcard: \n"  << std::endl;
+      
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::string input;
+      std::cin >> input;
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+      std::cout << "*" << input << "*" << std::endl;
+
+      for(int i=0; i<16; i++) {
+        if(i < input.size() && input[i] != '\n') {
+          input_chars[i] = input[i];
+        } else {
+          input_chars[i] = 0; 
+        }      
+      }
+              
+        count(demo_record, input_chars, result);
+        count(blank_record, input_chars, result);
+
+
+      auto output = result;
+
+      std::cout << output[0];
+      std::cout << "\n" << std::endl;
     }
       }
 
