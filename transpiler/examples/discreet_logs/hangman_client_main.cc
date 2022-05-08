@@ -26,6 +26,7 @@
 #include "transpiler/examples/discreet_logs/discreet_logs_select_index_tfhe.h"
 #include "transpiler/examples/discreet_logs/discreet_logs_count_tfhe.h"
 #include "transpiler/examples/discreet_logs/discreet_logs_read_all_tfhe.h"
+#include "transpiler/examples/discreet_logs/discreet_logs_insert_tfhe.h"
 #include "transpiler/examples/discreet_logs/hangman_api_tfhe.h"
 #include "transpiler/examples/discreet_logs/hangman_client.h"
 #include "xls/common/logging/logging.h"
@@ -52,10 +53,23 @@ int main() {
   char raw_record2[16] = {'M', 'y', 0, 0, 0, 0, 0, 0, 'C', 'o', 'n', 't', 'e', 'n', 't', 0};
   char raw_blank_record[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
+
+  // The order of these can be randomized so we don't know all blank ciphers are at the end.
   TfheString record1 = TfheString::Encrypt(raw_record1, key);
   TfheString record2 = TfheString::Encrypt(raw_record2, key);
+  TfheString record3 = TfheString::Encrypt(raw_blank_record, key);
+  TfheString record4 = TfheString::Encrypt(raw_blank_record, key);
+  TfheString record5 = TfheString::Encrypt(raw_blank_record, key);
+  
+  
+  std::vector<TfheString*> db;
+  db.push_back(&record1);
+  db.push_back(&record2);
+  db.push_back(&record3);
+  // db.push_back(&record4);
+  // db.push_back(&record5);
 
-  int db_size = 1;
+  int db_size = 2;
 
   std::cout << "Record1 is" << raw_record1 << std::endl;
 
@@ -119,14 +133,19 @@ int main() {
       auto query = TfheString::Encrypt(input_chars, key);
       auto result = TfheString::Encrypt(raw_result, key);
 
-      XLS_CHECK_OK(selectIndex(record1, query, result, key.cloud()));
-      XLS_CHECK_OK(selectIndex(record2, query, result, key.cloud()));
+      // XLS_CHECK_OK(selectIndex(record1, query, result, key.cloud()));
+      // XLS_CHECK_OK(selectIndex(record2, query, result, key.cloud()));
+
+      for(int i=0; i<db.size();i++) {
+        XLS_CHECK_OK(selectIndex(*db[i], query, result, key.cloud()));
+      }
 
       auto output = result.Decrypt(key);
 
       std::cout << output;
       std::cout << "\n" << std::endl;
     } else if(op_type == 3) {
+      int raw_result[2] = {0,0};
       char input_chars[16];
       std::cout << "Please enter the title (max size 8 chars): \n"  << std::endl;
       
@@ -159,8 +178,19 @@ int main() {
           input_chars[i] = 0; 
         }      
       }
+      
+      auto query = TfheString::Encrypt(input_chars, key);
+      auto result = TfheArray<int>::Encrypt(raw_result, key);
 
-      // record2 = TfheString::Encrypt(input_chars, key);
+      auto new_record = db[db_size-1];
+      XLS_CHECK_OK(insert(*db[db_size-1], query, result, key.cloud()));
+      db_size++;
+
+      auto output = result.Decrypt(key);
+      std::cout << output[0];
+      std::cout << "\n" << std::endl;
+
+      db.push_back(&record3);
     } else if(op_type == 4) {
       int raw_result[2] = {0, 0};
 

@@ -21,6 +21,7 @@
 #include "transpiler/examples/discreet_logs/discreet_logs_select_index.h"
 #include "transpiler/examples/discreet_logs/discreet_logs_count.h"
 #include "transpiler/examples/discreet_logs/discreet_logs_read_all.h"
+#include "transpiler/examples/discreet_logs/discreet_logs_insert.h"
 
 
 std::string update_current_word(char input_letter, int move_result,
