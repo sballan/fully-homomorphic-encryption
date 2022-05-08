@@ -1,11 +1,9 @@
 #ifndef FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_DISCREET_LOGS_DISCREET_LOGS_COUNT_H
 #define FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_DISCREET_LOGS_DISCREET_LOGS_COUNT_H
 
-const unsigned short MAX_SIZE = 16;
-
 void count(
-  char record[MAX_SIZE], 
-  char query[MAX_SIZE/2], 
+  char record[16], 
+  char query[16/2], 
   int result[2]
 );
 

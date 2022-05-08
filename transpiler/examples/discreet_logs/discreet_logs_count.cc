@@ -1,13 +1,13 @@
-#include "discreet_logs_select_index.h"
+#include "discreet_logs_count.h"
 
 #pragma hls_top
 void count(
-  char record[MAX_SIZE], 
-  char query[MAX_SIZE/2], 
+  char record[16], 
+  char query[16/2], 
   int result[2]
 ) {
   #pragma hls_unroll yes
-  for(int i=0; i<MAX_SIZE/2; i++) {
+  for(int i=0; i<16/2; i++) {
     if(query[i] != record[i]) {
       if(query[i] == '*') {
         result[0]++;

@@ -167,10 +167,10 @@ int main() {
       }
               
       auto query = TfheString::Encrypt(input_chars, key);
-      auto result = TfheString::Encrypt(raw_result, key);
+      auto result = TfheArray<int>::Encrypt(raw_result, key);
 
-      XLS_CHECK_OK(selectIndex(record1, query, result, key.cloud()));
-      XLS_CHECK_OK(selectIndex(record2, query, result, key.cloud()));
+      XLS_CHECK_OK(count(record1, query, result, key.cloud()));
+      XLS_CHECK_OK(count(record2, query, result, key.cloud()));
 
       auto output = result.Decrypt(key);
 
