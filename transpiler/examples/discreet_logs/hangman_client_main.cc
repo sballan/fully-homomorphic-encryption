@@ -22,6 +22,34 @@
 #include <locale>
 #include <string>
 
+void selectIndex(
+  char record[16+1], 
+  char query[8], 
+  char result[8+1]
+) {
+  // Return if record was already found
+  if(result[0] != '\0'){
+    result[8+1]++;         // This is meant to alter the ciphertext even though the plaintext doesn't change
+    return;
+  } 
+
+  // Return if record is blank
+  if(record[0] == '\0'){
+    result[8+1]++;         
+    return;
+  } 
+
+  for(int i=0; i<8; i++) {
+    if(query[i] != record[i]) {
+      result[8+1]++; 
+      return;
+    }
+  }
+
+  for(int i=0; i<8; i++) {
+    result[i] = record[i+8];
+  }
+}
 
 
 
@@ -94,7 +122,36 @@ int main() {
         std::cout << output[i];
       }
       std::cout << "\n" << std::endl;      
-    } 
+    } else if(op_type == 2) {
+      char result[8+1] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+      char input_chars[8];
+      std::cout << "Please enter the query (max size 8 chars): \n"  << std::endl;
+      
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::string input;
+      std::cin >> input;
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+      std::cout << "*" << input << "*" << std::endl;
+
+      for(int i=0; i<8; i++) {
+        if(i < input.size() && input[i] != '\n') {
+          input_chars[i] = input[i];
+        } else {
+          input_chars[i] = 0; 
+        }      
+      }
+              
+      selectIndex(demo_record, input_chars, result);
+      selectIndex(blank_record, input_chars, result);
+
+
+
+      auto output = result;
+      for (int i=0; i<8; i++){
+        std::cout << output[i];
+      }      std::cout << "\n" << std::endl;
+    }
       }
 
 
