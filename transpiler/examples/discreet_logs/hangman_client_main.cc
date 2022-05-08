@@ -61,7 +61,7 @@ int main() {
   std::vector<TfheString*> db;
   db.push_back(&demo_record);
   db.push_back(&blank_record1);
-  // db.push_back(&blank_record2);
+  db.push_back(&blank_record2);
 
   // records are seralized, sent to carol, and persisted.  all future accesses of records happen by carol
 
