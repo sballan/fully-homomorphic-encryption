@@ -33,7 +33,6 @@ void count(
     return;
   }
 
-  #pragma hls_unroll yes
   for(int i=0; i<16/2; i++) {
     if(query[i] != record[i]) {
       if(query[i] == '*') {
