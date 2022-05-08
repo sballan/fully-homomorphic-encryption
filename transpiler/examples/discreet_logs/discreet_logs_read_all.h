@@ -2,9 +2,9 @@
 #define FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_DISCREET_LOGS_DISCREET_LOGS_READ_ALL_H
 
 void readAll(
-  char record[16], 
-  int counter[2],
-  char result[32]
+  char record[16+1], 
+  int counter[1+1],
+  char result[32+1]
 );
 
 #endif  // FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_DISCREET_LOGS_DISCREET_LOGS_READ_ALL_H

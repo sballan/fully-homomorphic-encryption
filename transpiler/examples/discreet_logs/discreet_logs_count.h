@@ -2,9 +2,9 @@
 #define FULLY_HOMOMORPHIC_ENCRYPTION_TRANSPILER_EXAMPLES_DISCREET_LOGS_DISCREET_LOGS_COUNT_H
 
 void count(
-  char record[16], 
-  char query[16/2], 
-  int result[2]
+  char record[16+1], 
+  char query[8], 
+  int result[1+1]
 );
 
 

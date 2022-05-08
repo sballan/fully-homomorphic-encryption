@@ -2,11 +2,16 @@
 
 #pragma hls_top
 void insert(
-  char record[16], 
+  char record[16+1], 
   char query[16], 
-  int result[2]
+  int result[1+1]
 ) {
-  if(record[0] != 0) {
+  // Return if we already inserted
+  if(result[0] == 1) return;
+
+  // Return if record is not blank
+  if(record[0] != '\0') {
+    record[16+1]++;
     result[1]++;
     return;
   }
@@ -16,5 +21,5 @@ void insert(
     record[i] = query[i];
   }
 
-  result[0]++;
+  result[0]=1;
 }

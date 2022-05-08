@@ -2,10 +2,15 @@
 
 #pragma hls_top
 void count(
-  char record[16], 
-  char query[16/2], 
-  int result[2]
+  char record[16+1], 
+  char query[8], 
+  int result[1+1]
 ) {
+  if(record[0] == '\0') {
+    result[1]++;
+    return;
+  }
+
   #pragma hls_unroll yes
   for(int i=0; i<16/2; i++) {
     if(query[i] != record[i]) {
