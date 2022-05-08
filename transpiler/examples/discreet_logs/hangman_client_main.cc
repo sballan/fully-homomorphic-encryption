@@ -141,7 +141,7 @@ int main() {
     } else if(op_type == 3) {
       int raw_result[1+1] = {0,0};
       char input_chars[INSERT_MAX];
-      std::cout << "Please enter the title (max size 8 chars): \n"  << std::endl;
+      std::cout << "Please enter the title (max size "<< INSERT_MAX/2 <<" chars): \n"  << std::endl;
       
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::string input;
@@ -158,7 +158,7 @@ int main() {
       }
       std::cout << "*" << input_chars << "*" << std::endl;
 
-      std::cout << "Please enter the content (max size 8 chars): \n"  << std::endl;
+      std::cout << "Please enter the content (max size "<< INSERT_MAX/2 <<" chars): \n"  << std::endl;
       
       std::string input2;
       // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -196,7 +196,7 @@ int main() {
       int raw_result[1+1] = {0, 0};
 
       char input_chars[COUNT_MAX];
-      std::cout << "Please enter the query (max size 8 chars), use * for wildcard: \n"  << std::endl;
+      std::cout << "Please enter the query (max size "<< COUNT_MAX/2 <<" chars), use * for wildcard: \n"  << std::endl;
       
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::string input;
