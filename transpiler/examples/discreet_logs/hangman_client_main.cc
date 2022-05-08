@@ -25,6 +25,7 @@
 #include "transpiler/data/tfhe_data.h"
 #include "transpiler/examples/discreet_logs/discreet_logs_select_index_tfhe.h"
 #include "transpiler/examples/discreet_logs/discreet_logs_count_tfhe.h"
+#include "transpiler/examples/discreet_logs/discreet_logs_read_all_tfhe.h"
 #include "transpiler/examples/discreet_logs/hangman_api_tfhe.h"
 #include "transpiler/examples/discreet_logs/hangman_client.h"
 #include "xls/common/logging/logging.h"
@@ -78,7 +79,22 @@ int main() {
     std::cin >> op_type;
 
     if(op_type == 1) {
-      
+      int raw_counter[2] = {0, 0};
+      char raw_result[32];
+      for(int i=0;i<32;i++) {
+        raw_result[i] = 0;
+      }
+
+      auto counter = TfheArray<int>::Encrypt(raw_counter, key);
+      auto result = TfheString::Encrypt(raw_result, key);
+
+      XLS_CHECK_OK(readAll(record1, counter, result, key.cloud()));
+      XLS_CHECK_OK(readAll(record2, counter, result, key.cloud()));
+
+      auto output = result.Decrypt(key);
+
+      std::cout << output;
+      std::cout << "\n" << std::endl;      
     } else if(op_type == 2) {
       char raw_result[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
