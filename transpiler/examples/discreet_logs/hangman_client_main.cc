@@ -22,10 +22,6 @@
 #include <locale>
 #include <string>
 
-#include "transpiler/examples/discreet_logs/discreet_logs_select_index.cc"
-#include "transpiler/examples/discreet_logs/discreet_logs_count.cc"
-#include "transpiler/examples/discreet_logs/discreet_logs_read_all.cc"
-#include "transpiler/examples/discreet_logs/discreet_logs_insert.cc"
 
 
 
@@ -94,16 +90,13 @@ int main() {
 
 
       auto output = raw_result;
-
-      std::cout << output;
+      for (int i=0; i<32; i++){
+        std::cout << output[i];
+      }
       std::cout << "\n" << std::endl;      
     } 
       }
-    } 
-  }
-    } 
-  }
-    } 
+
 
   return 0;
 }
