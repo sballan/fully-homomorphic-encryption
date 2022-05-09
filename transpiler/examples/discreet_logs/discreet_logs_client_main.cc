@@ -72,7 +72,7 @@ int main() {
 
 
   // records are seralized, sent to carol, and persisted.  all future accesses of records happen by carol
-  std::cout << "Database handshake complete\n\n" << std::endl;
+  std::cout << "Server handshake complete\n\n" << std::endl;
 
   std::cout << "Welcome to Discreet Logs!" << std::endl;
   
