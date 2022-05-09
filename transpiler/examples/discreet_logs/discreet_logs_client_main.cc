@@ -233,7 +233,7 @@ int main() {
       std::cin >> input;
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-      std::cout << "Entered\"" << input << "\"" << std::endl;
+      std::cout << "Entered \"" << input << "\"" << std::endl;
 
       for(int i=0; i<COUNT_MAX; i++) {
         if(i < input.size() && input[i] != '\n') {
