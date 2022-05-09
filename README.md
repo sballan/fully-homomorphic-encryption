@@ -1,3 +1,6 @@
+# Notes for Applied Cryptography fork by Samuel Ballan and Ahmed Khater:
+See [this README](/transpiler/examples/discreet_logs/README.md). 
+
 # Fully Homomorphic Encryption (FHE)
 
 This repository contains open-source libraries and tools to perform fully
