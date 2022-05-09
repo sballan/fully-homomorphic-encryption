@@ -27,9 +27,12 @@
 #include "transpiler/examples/discreet_logs/discreet_logs_count_tfhe.h"
 #include "transpiler/examples/discreet_logs/discreet_logs_read_all_tfhe.h"
 #include "transpiler/examples/discreet_logs/discreet_logs_insert_tfhe.h"
-#include "transpiler/examples/discreet_logs/hangman_api_tfhe.h"
-#include "transpiler/examples/discreet_logs/hangman_client.h"
+#include "transpiler/examples/discreet_logs/discreet_logs_select_index.h"
+#include "transpiler/examples/discreet_logs/discreet_logs_count.h"
+#include "transpiler/examples/discreet_logs/discreet_logs_read_all.h"
+#include "transpiler/examples/discreet_logs/discreet_logs_insert.h"
 #include "xls/common/logging/logging.h"
+
 
 
 constexpr int kMainMinimumLambda = 120;
