@@ -105,7 +105,7 @@ int main() {
         XLS_CHECK_OK(readAll(*db[i], counter, result, key.cloud()));
       }
 
-      std::cout << "-- Server returns altered result ciphertext" << std::endl;
+      std::cout << "-- Server returns altered result ciphertext\n" << std::endl;
 
       auto output = result.Decrypt(key);
 
