@@ -34,8 +34,8 @@
 #include "xls/common/logging/logging.h"
 
 
-
-constexpr int kMainMinimumLambda = 120;
+// Length of the keys
+constexpr int kMainMinimumLambda = 128;
 
 int main() {
   std::cout << "Starting..." << std::endl;
@@ -45,8 +45,7 @@ int main() {
   TFHEParameters params(kMainMinimumLambda);
 
   // generate a random key
-  // Note: In real applications, a cryptographically secure seed needs to be
-  // used.
+  // These 3 integers should be considered to have been selected psuedo-randomly
   std::array<uint32_t, 3> seed = {314, 1592, 657};
   TFHESecretKeySet key(params, seed);
 
@@ -62,12 +61,10 @@ int main() {
   // The order of these can be randomized so we don't know all blank ciphers are at the end.
   TfheString demo_record = TfheString::Encrypt(raw_demo_record, key);
   TfheString blank_record1 = TfheString::Encrypt(raw_blank_record, key);
-  TfheString blank_record2 = TfheString::Encrypt(raw_blank_record, key);
   
   std::vector<TfheString*> db;
   db.push_back(&demo_record);
   db.push_back(&blank_record1);
-  db.push_back(&blank_record2);
 
   // records are seralized, sent to carol, and persisted.  all future accesses of records happen by carol
 
