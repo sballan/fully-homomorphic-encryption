@@ -4,4 +4,4 @@ This project uses the `bazel` build system of Google's `fully-homomorphic-encryp
 
 To install `bazel` and build this project, follow the instructions at [`/transpiler/README.md`](/transpiler/README.md).  We found it works best to install using Option A on an Intel Ubuntu system with at least 4 cores and 8GB of RAM.
 
-From the root directory of the forked repository, you can then run `bazel run //transpiler/examples/discreet_logs:hangman_client`.
+From the root directory of the forked repository, you can then run `bazel run //transpiler/examples/discreet_logs:discreet_logs_client`.
